@@ -29,6 +29,7 @@ jobs:
 
       - name: Start containers
         run: |
+          docker network create frontend --driver bridge
           docker-compose up -d
           sleep 10
 
