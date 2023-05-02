@@ -1,10 +1,10 @@
 name: 'Jupyter CI'
-on:
-  push:
+on: push
 jobs:
   build-docker-artifacts:
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'master')
+    if: contains(github.ref, 'master') || contains(github.ref, 'dev') || contains(github.ref, 'staging')
+
     steps:
       - uses: actions/setup-go@v1
         with:
