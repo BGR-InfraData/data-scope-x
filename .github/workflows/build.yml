@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Docker Build
-        run: docker build -t jupyter-notebook-airflow:latest ./jupyter/Dockerfile
+        run: docker build -t jupyter-notebook-airflow:latest /home/runner/work/data-scope-x/data-scope-x/jupyter/Dockerfile
 
 
       - name: Docker Tag Latest
