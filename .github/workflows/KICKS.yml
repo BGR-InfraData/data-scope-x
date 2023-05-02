@@ -41,4 +41,3 @@ jobs:
           low=$(cat myResults/results.json | grep '"LOW":' | cut -d ':' -f 2 | sed s/,//g)
           repo=${{ github.server_url }}/${{ github.repository }}
           link=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          curl -X POST -H 'Content-type: application/json; charset=utf-8' --data "{ 'text': 'KICS Scan Completed for $repo\n----------\n HIGH: $high \n MEDIUM: $medium \n LOW: $low \n---------- \ncheck complete results at $link' }" ${{ secrets.SLACK_WEBHOOK }}
