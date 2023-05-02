@@ -12,7 +12,8 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Docker Build
-        run: docker build -t jupyter-notebook-airflow:latest .
+        run: docker build -t jupyter-notebook-airflow:latest -f path/to/Dockerfile .
+
 
       - name: Docker Tag Latest
         run: docker tag jupyter-notebook-airflow:latest ronaldnnr/jupyter-notebook-airflow:latest
