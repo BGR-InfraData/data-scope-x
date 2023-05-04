@@ -58,7 +58,10 @@ Obs.: Credencias podem ser alteradas no arquivo `docker-compose.yml`
 - Airflow: http://127.0.0.1:8080/
 - MLFlow: http://127.0.0.1:5000/
 - Vault: http://127.0.0.1:8200/
+- Flower: http://127.0.0.1:5555
 - Adminer: http://127.0.0.1:8081/
+- Prometheus: http://127.0.0.1:9090
+- Grafana: http://127.0.0.1:3000
 
 ## Subir serviços durante inicialização:
 
@@ -101,4 +104,4 @@ systemctl daemon-reload
 systemctl enable docker-compose-mlops.service
 ```
 
-`Created by Gustavo Oliveira`
+`Created by Bruno Vieira Gustavo Oliveira, Ronald Silva `
