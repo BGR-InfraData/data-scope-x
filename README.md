@@ -1,5 +1,9 @@
 #estudos #mlops 
 # MLOps Env Study
+Diagram of Airflow Monitoring
+First, let's get an overview of the entire process. Apache Airflow has the capability to transmit metrics using the statsd protocol. Typically, a statsd server would receive these metrics and store them in a selected backend. However, our objective is to direct these metrics to Prometheus. How can we achieve this transfer from statsd to Prometheus? The Prometheus project conveniently provides a statsd_exporter, which serves as a bridge between the two systems. This statsd_exporter accepts statsd metrics on one end and makes them available as Prometheus metrics on the other. The Prometheus server can then collect the metrics offered by the statsd_exporter. In summary, the structure of the Airflow monitoring system can be depicted as follows:
+
+<img width="1022" alt="image" src="https://user-images.githubusercontent.com/46574677/236079374-01be27f1-5c8a-410d-bdc0-479a55231b7d.png">
 
 Ambientes para fins de estudos.
 
