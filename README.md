@@ -1,6 +1,19 @@
 #estudos #mlops 
 # MLOps Env Study
 
+Diagrama de Monitoramento do Airflow
+Primeiro, vamos obter uma visão geral de todo o processo. O Apache Airflow tem a capacidade de transmitir métricas usando o protocolo statsd. Normalmente, um servidor statsd receberia essas métricas e as armazenaria em um backend selecionado. No entanto, nosso objetivo é direcionar essas métricas para o Prometheus. Como podemos realizar essa transferência do statsd para o Prometheus? O projeto Prometheus fornece convenientemente um statsd_exporter, que serve como uma ponte entre os dois sistemas. Este statsd_exporter aceita métricas statsd em uma extremidade e as disponibiliza como métricas Prometheus na outra. O servidor Prometheus pode então coletar as métricas oferecidas pelo statsd_exporter. Em resumo, a estrutura do sistema de monitoramento do Airflow pode ser representada da seguinte forma:
+
+<img width="1022" alt="image" src="https://user-images.githubusercontent.com/46574677/236079374-01be27f1-5c8a-410d-bdc0-479a55231b7d.png">
+
+A ilustração apresenta três componentes-chave do Airflow: o Webserver, Scheduler e Worker. A linha sólida que se origina do Webserver, Scheduler e Worker demonstra o fluxo de métricas desses componentes para o statsd_exporter. O statsd_exporter compila as métricas, transforma-as no formato Prometheus e as expõe através de um endpoint Prometheus. O servidor Prometheus periodicamente recupera dados deste endpoint e armazena as métricas em seu banco de dados. Posteriormente, as métricas do Airflow armazenadas no Prometheus podem ser acessadas por meio do painel do Grafana.
+
+estabeleceremos a configuração retratada no diagrama acima. Nossas etapas incluirão:
+
+- Configurar o Airflow para transmitir métricas statsd.
+- Empregar o statsd_exporter para converter métricas statsd em métricas Prometheus.
+- Implantar o servidor Prometheus para coletar métricas e fornecer acesso ao Grafana.
+
 Ambientes para fins de estudos.
 
 Os seguintes serviços serão executados:
@@ -45,7 +58,10 @@ Obs.: Credencias podem ser alteradas no arquivo `docker-compose.yml`
 - Airflow: http://127.0.0.1:8080/
 - MLFlow: http://127.0.0.1:5000/
 - Vault: http://127.0.0.1:8200/
+- Flower: http://127.0.0.1:5555
 - Adminer: http://127.0.0.1:8081/
+- Prometheus: http://127.0.0.1:9090
+- Grafana: http://127.0.0.1:3000
 
 ## Subir serviços durante inicialização:
 
@@ -88,4 +104,4 @@ systemctl daemon-reload
 systemctl enable docker-compose-mlops.service
 ```
 
-`Created by Gustavo Oliveira`
+`Created by Bruno Vieira, Gustavo Oliveira, Ronald Silva`

@@ -1,7 +1,19 @@
 version: '3.8'
+networks:
+  frontend:
+    name: frontend
+    external: true
+    driver: bridge
+  backend:
+    name: backend
+    external: false
+
 x-airflow-common:
   &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.5.3}
+  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.0-python3.9}
+  build:
+    context: .
+    dockerfile: ./dockerfiles-build/airflow/Dockerfile
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
@@ -41,6 +53,9 @@ services:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
+    networks:
+      - frontend
+      - backend
     ports:
       - "5432:5432"
     volumes:
@@ -58,6 +73,9 @@ services:
       POSTGRES_USER: mlflow
       POSTGRES_PASSWORD: mlflow
       POSTGRES_DB: mlflow
+    networks:
+      - frontend
+      - backend
     ports:
       - "5433:5432"
     volumes:
@@ -71,6 +89,9 @@ services:
 
   redis:
     image: redis:latest
+    networks:
+      - frontend
+      - backend
     expose:
       - 6379
     healthcheck:
@@ -85,6 +106,9 @@ services:
     <<: *airflow-common
     container_name: airflow-webserver
     command: webserver
+    networks:
+      - frontend
+      - backend
     ports:
       - "8080:8080"
     healthcheck:
@@ -102,6 +126,9 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
+    networks:
+      - frontend
+      - backend
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
       interval: 30s
@@ -117,6 +144,9 @@ services:
   airflow-worker:
     <<: *airflow-common
     command: celery worker
+    networks:
+      - frontend
+      - backend
     healthcheck:
       test:
         - "CMD-SHELL"
@@ -137,6 +167,9 @@ services:
   airflow-triggerer:
     <<: *airflow-common
     command: triggerer
+    networks:
+      - frontend
+      - backend
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
       interval: 30s
@@ -152,6 +185,9 @@ services:
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash
+    networks:
+      - frontend
+      - backend
     command:
       - -c
       - |
@@ -240,6 +276,9 @@ services:
   flower:
     <<: *airflow-common
     command: celery flower
+    networks:
+      - frontend
+      - backend
     profiles:
       - flower
     ports:
@@ -259,6 +298,9 @@ services:
   mlflow:
     image: python:3.9.12
     restart: always
+    networks:
+      - frontend
+      - backend
     ports:
       - "5000:5000"
     command: sh -c "apt-get update &&
