@@ -104,4 +104,4 @@ systemctl daemon-reload
 systemctl enable docker-compose-mlops.service
 ```
 
-`Created by Bruno Vieira Gustavo Oliveira, Ronald Silva `
+`Created by Bruno Vieira, Gustavo Oliveira, Ronald Silva`
