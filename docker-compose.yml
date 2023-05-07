@@ -357,6 +357,17 @@ services:
       - VAULT_DEV_ROOT_TOKEN_ID=myroot
     volumes:
       - ./vault:/vault/file
+  
+  iris-api:
+    build:
+      context: .
+      dockerfile: ./api-examples/iris/Dockerfile
+    restart: always
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "9000:9000"
 
 volumes:
   mlflow_artifacts:
