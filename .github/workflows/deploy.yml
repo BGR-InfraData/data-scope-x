@@ -29,6 +29,7 @@ jobs:
       env:
         INSTANCE_NAME: ${{ secrets.INSTANCE_NAME }}
       run: |
+       set -x 
        INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$INSTANCE_NAME" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
        tar czf project.tar.gz --warning=no-file-changed --exclude='.git' --exclude='.github' .
        aws s3 cp project.tar.gz s3://bgr-infra/project.tar.gz
