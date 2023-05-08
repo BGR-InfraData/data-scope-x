@@ -24,6 +24,10 @@ jobs:
       run: |
         curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
         sudo dpkg -i session-manager-plugin.deb
+    
+    - name: Install jq
+      run: sudo apt-get install jq -y
+
 
     - name: Deploy to EC2
       env:
@@ -75,16 +79,16 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       run: |
-        set -x
-        INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$INSTANCE_NAME" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
-        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%S")
-        COMMAND_ID=$(aws ssm list-command-invocations --query "CommandInvocations[?ExecutionStartDateTime >= '$TIMESTAMP'].CommandId | [0]" --output text)
-        sleep 20
-        COMMAND_STATUS=$(aws ssm get-command-invocation --command-id "$COMMAND_ID" --instance-id "$INSTANCE_ID" --query "Status" --output text)
-        echo "Command Status: $COMMAND_STATUS"
-        COMMAND_OUTPUT=$(aws ssm get-command-invocation --command-id "$COMMAND_ID" --instance-id "$INSTANCE_ID" --query "StandardOutputContent" --output text)
-        echo "Command Output:"
-        echo "$COMMAND_OUTPUT"
+       set -x
+       INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$INSTANCE_NAME" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
+       COMMAND_ID=$(aws ssm list-command-invocations --output json | jq -r 'sort_by(.ExecutionStartDateTime)[-1].CommandId')
+       sleep 20
+       COMMAND_STATUS=$(aws ssm get-command-invocation --command-id "$COMMAND_ID" --instance-id "$INSTANCE_ID" --query "Status" --output text)
+       echo "Command Status: $COMMAND_STATUS"
+       COMMAND_OUTPUT=$(aws ssm get-command-invocation --command-id "$COMMAND_ID" --instance-id "$INSTANCE_ID" --query "StandardOutputContent" --output text)
+       echo "Command Output:"
+       echo "$COMMAND_OUTPUT"
+
 
 
 
