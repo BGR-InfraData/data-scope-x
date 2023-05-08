@@ -13,7 +13,7 @@ jobs:
 
       - name: Docker Build
         run: |
-         docker build -t jupyter-notebook-airflow:latest /home/runner/work/data-scope-x/data-scope-x/jupyter/
+         docker build -t jupyter-notebook-airflow:latest /home/runner/work/data-scope-x/data-scope-x/dockerfiles-build/jupyter
          
       - name: Docker Tag Latest
         run: docker tag jupyter-notebook-airflow:latest ronaldnnr/jupyter-notebook-airflow:latest
