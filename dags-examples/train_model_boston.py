@@ -53,7 +53,7 @@ def train_and_log_model():
     signature = infer_signature(X_train, model.predict(X_train))
     mse = mean_squared_error(y_test, y_pred)
 
-    mlflow.set_tracking_uri("http://192.168.64.6:5000")
+    mlflow.set_tracking_uri("http://mlflow:5000")
     mlflow.set_experiment("boston-housing")
     with mlflow.start_run(run_name="run_" + datetime.now().strftime("%Y%m%d_%H%M%S")):
         mlflow.log_metric("mse", mse)

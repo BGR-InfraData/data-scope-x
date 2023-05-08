@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from pydantic import BaseModel
 
-mlflow.set_tracking_uri("http://192.168.64.6:5000")
+mlflow.set_tracking_uri("http://mlflow:5000")
 
 app = FastAPI(
     title="BGR - Iris prediction",

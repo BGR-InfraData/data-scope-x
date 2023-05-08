@@ -45,7 +45,7 @@ def train_model():
     signature = infer_signature(X_train, clf.predict(X_train))
     score = clf.score(X_test, y_test)
 
-    mlflow.set_tracking_uri("http://192.168.64.6:5000")
+    mlflow.set_tracking_uri("http://mlflow:5000")
     mlflow.set_experiment("iris")
     with mlflow.start_run(run_name="run_" + datetime.now().strftime("%Y%m%d_%H%M%S")):
         mlflow.log_metric("score", score)
