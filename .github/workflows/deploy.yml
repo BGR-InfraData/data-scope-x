@@ -27,17 +27,21 @@ jobs:
 
     - name: Deploy to EC2
       env:
-        INSTANCE_NAME: ${{ secrets.INSTANCE_NAME }}
+       INSTANCE_NAME: ${{ secrets.INSTANCE_NAME }}
       run: |
-       set -e
-       set -x
-       INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$INSTANCE_NAME" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
-       echo "INSTANCE_ID: $INSTANCE_ID"
-       tar czf project.tar.gz --warning=no-file-changed --exclude='.git' --exclude='.github' .
-       aws s3 cp project.tar.gz s3://bgr-infra/project.tar.gz
-       aws ssm send-command \
-        --instance-ids "$INSTANCE_ID" \
-        --document-name "AWS-RunShellScript" \
-        --comment "Deploy project" \
-        --parameters commands="aws s3 cp s3://bgr-infra/project.tar.gz /home/ubuntu/project.tar.gz && tar xzf /home/ubuntu/project.tar.gz -C /home/ubuntu && cd /home/ubuntu/data-scope-x && docker-compose build && docker-compose up -d" \
-        --output text
+        set -x
+        INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$INSTANCE_NAME" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
+        echo "INSTANCE_ID: $INSTANCE_ID"
+        echo $?
+        tar czf project.tar.gz --warning=no-file-changed --exclude='.git' --exclude='.github' .
+        echo $?
+        aws s3 cp project.tar.gz s3://bgr-infra/project.tar.gz
+        echo $?
+        aws ssm send-command \
+         --instance-ids "$INSTANCE_ID" \
+         --document-name "AWS-RunShellScript" \
+         --comment "Deploy project" \
+         --parameters commands="aws s3 cp s3://bgr-infra/project.tar.gz /home/ubuntu/project.tar.gz && tar xzf /home/ubuntu/project.tar.gz -C /home/ubuntu && cd /home/ubuntu/data-scope-x && docker-compose build && docker-compose up -d" \
+         --output text
+        echo $?
+
