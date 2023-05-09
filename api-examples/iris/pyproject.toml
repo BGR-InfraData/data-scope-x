@@ -13,6 +13,7 @@ scikit-learn = "^1.2.2"
 uvicorn = "^0.22.0"
 pydantic = "^1.10.7"
 
+
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.22.0"
 autopep8 = "^2.0.2"

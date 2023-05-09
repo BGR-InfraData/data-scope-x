@@ -368,7 +368,7 @@ services:
       - backend
     ports:
       - "9000:9000"
-      
+
 volumes:
   mlflow_artifacts:
   postgres-db-volume-airflow:
