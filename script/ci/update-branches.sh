@@ -4,7 +4,7 @@ set -e
 cd "$(git rev-parse --show-toplevel)" || exit 1
 
 # shellcheck disable=SC1091
-source tools/ci/.envrc
+source script/ci/.envrc
 
 set +e
 IFS=',' read -r -a BRANCHES <<< "${UPDATE_BRANCHES}"
