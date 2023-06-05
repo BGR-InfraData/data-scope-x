@@ -357,7 +357,7 @@ services:
       - VAULT_DEV_ROOT_TOKEN_ID=myroot
     volumes:
       - ./vault:/vault/file
-  
+      
   iris-api:
     build:
       context: .
