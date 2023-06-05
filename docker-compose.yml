@@ -357,7 +357,7 @@ services:
       - VAULT_DEV_ROOT_TOKEN_ID=myroot
     volumes:
       - ./vault:/vault/file
-  
+      
   iris-api:
     build:
       context: .
@@ -368,7 +368,7 @@ services:
       - backend
     ports:
       - "9000:9000"
-      
+
 volumes:
   mlflow_artifacts:
   postgres-db-volume-airflow:
