@@ -34,10 +34,10 @@ x-airflow-common:
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
-    - /opt/airflow/airflow.cfg:/opt/airflow/airflow.cfg
-    - /opt/airflow/dags:/opt/airflow/dags
-    - /opt/airflow/logs:/opt/airflow/logs
-    - /opt/airflow/plugins:/opt/airflow/plugins
+    - ./airflow.cfg:/opt/airflow/airflow.cfg
+    - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
+    - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
+    - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
