@@ -275,7 +275,7 @@ services:
       _PIP_ADDITIONAL_REQUIREMENTS: ''
     user: "0:0"
     volumes:
-      - /home/ubuntu/data-scope-x/sources:/sources
+      - /home/ubuntu/data-scope-x/airflow/sources:/sources
 
   airflow-cli:
     <<: *airflow-common
