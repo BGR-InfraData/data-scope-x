@@ -34,10 +34,10 @@ x-airflow-common:
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
-    - ./airflow.cfg:/opt/airflow/airflow.cfg
-    - ./dags:/opt/airflow/dags
-    - ./logs:/opt/airflow/logs
-    - ./plugins:/opt/airflow/plugins
+    - /home/ubuntu/data-scope-x/airflow/airflow.cfg:/opt/airflow/airflow.cfg
+    - /home/ubuntu/data-scope-x/airflow/dags:/opt/airflow/dags
+    - /home/ubuntu/data-scope-x/airflow/logs:/opt/airflow/logs
+    - /home/ubuntu/data-scope-x/airflow/plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -321,7 +321,7 @@ services:
       - "5000:5000"
     command: sh -c "apt-get update && apt-get install -y libpq-dev gcc && pip install mlflow==2.2.2 psycopg2 && mlflow server --host 0.0.0.0 --backend-store-uri postgresql://mlflow:mlflow@postgres_mlflow/mlflow"
     volumes:
-      - ./mlflow_artifacts:/mlartifacts
+      - /home/ubuntu/data-scope-x/mlflow/mlflow_artifacts:/mlartifacts
     depends_on:
       - postgres_mlflow
 
@@ -349,8 +349,8 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/volume:/prometheus
+      - /home/ubuntu/data-scope-x/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /home/ubuntu/data-scope-x/prometheus/volume:/prometheus
 
   grafana:
     image: grafana/grafana:7.1.5
@@ -369,7 +369,7 @@ services:
     environment:
       - VAULT_DEV_ROOT_TOKEN_ID=myroot
     volumes:
-      - ./vault:/vault/file
+      - /home/ubuntu/data-scope-x/vault/file:/vault/file
 
   iris-api:
     build:
