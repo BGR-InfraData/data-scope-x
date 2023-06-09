@@ -1,9 +1,11 @@
 name: Deploy to EC2
 
-on:
+on: 
   push:
     branches:
       - master
+  repository_dispatch:
+    types: [deploy]
 
 jobs:
   deploy:
