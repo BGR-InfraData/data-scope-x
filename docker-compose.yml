@@ -35,9 +35,9 @@ x-airflow-common:
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
     - ./airflow.cfg:/opt/airflow/airflow.cfg
-    - ./home/ubuntu/data-scope-x/airflow/dags:/opt/airflow/dags
-    - ./home/ubuntu/data-scope-x/airflow/logs:/opt/airflow/logs
-    - ./home/ubuntu/data-scope-x/airflow/plugins:/opt/airflow/plugins
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -59,7 +59,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./home/ubuntu/data-scope-x/postgres/postgres-db-volume-airflow:/var/lib/postgresql/data
+      - ./postgres-db-volume-airflow:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "airflow" ]
       interval: 10s
@@ -79,7 +79,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ./home/ubuntu/data-scope-x/postgres/postgres-db-volume-mlflow:/var/lib/postgresql/data
+      - ./postgres-db-volume-mlflow:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "mlflow" ]
       interval: 10s
@@ -275,7 +275,7 @@ services:
       _PIP_ADDITIONAL_REQUIREMENTS: ''
     user: "0:0"
     volumes:
-      - ./home/ubuntu/data-scope-x/airflow/sources:/sources
+      - .:/sources
 
   airflow-cli:
     <<: *airflow-common
@@ -321,7 +321,7 @@ services:
       - "5000:5000"
     command: sh -c "apt-get update && apt-get install -y libpq-dev gcc && pip install mlflow==2.2.2 psycopg2 && mlflow server --host 0.0.0.0 --backend-store-uri postgresql://mlflow:mlflow@postgres_mlflow/mlflow"
     volumes:
-      - ./home/ubuntu/data-scope-x/mlflow/mlflow_artifacts:/mlartifacts
+      - ./mlflow_artifacts:/mlartifacts
     depends_on:
       - postgres_mlflow
 
@@ -349,8 +349,8 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./home/ubuntu/data-scope-x/prometheus:/etc/prometheus
-      - ./home/ubuntu/data-scope-x/prometheus/volume:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/volume:/prometheus
 
   grafana:
     image: grafana/grafana:7.1.5
@@ -369,7 +369,7 @@ services:
     environment:
       - VAULT_DEV_ROOT_TOKEN_ID=myroot
     volumes:
-      - /home/ubuntu/data-scope-x/vault/file:/vault/file
+      - ./vault:/vault/file
 
   iris-api:
     build:
