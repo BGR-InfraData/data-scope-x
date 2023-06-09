@@ -78,4 +78,4 @@ jobs:
       run: |
           set -x
           INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$INSTANCE_NAME" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
-          aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name "AWS-RunShellScript" --comment "Run docker-compose up -d" --parameters 'commands=["if [ -d '\''~/data-scope-x'\'' ]; then", "cd ~/data-scope-x", "docker-compose up -d", "else", "echo '\''Directory not found'\''", "fi"]' --output text
+          aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name "AWS-RunShellScript" --comment "Run docker-compose up -d" --parameters 'commands=["if [ -d '\''~/data-scope-x'\'' ]; then", "cd ~/data-scope-x", "docker-compose down && docker-compose up -d", "else", "echo '\''Directory not found'\''", "fi"]' --output text
